@@ -22,9 +22,6 @@ function box(){
     let ul = document.querySelector("#container ul");
     ul.parentNode.removeChild(ul);
   }
-  else{
-    alert("No UL");
-  }
   wikiSearch(search);
 }
 
