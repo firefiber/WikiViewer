@@ -1,6 +1,9 @@
-let resDisp = document.getElementById("container");
+let wikiLink = "http://en.wikipedia.org/?curid="; //Used to put in the page ID for full URL
+let resDisp = document.getElementById("container"); //Div where results are displayed
+
 let searchBox = document.getElementById("searchBox");
 let searchBtn = document.getElementById("sbtn");
+let randomBtn = document.getElementById("rbtn");
 
 // Pressing "ENTER" or clicking button - initiates API call
 searchBtn.onclick = sbox;
@@ -32,7 +35,7 @@ function sbox(){
 function wikiSearch(search){
   let newAJAX = new XMLHttpRequest();
   let page = 0;
-  let url = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=info&list=search&generator=search&inprop=url&srlimit=10&sroffset=1&srprop=snippet&gsrlimit=10&gsroffset=1"
+  let url = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=info|pageimages&piprop=thumbnail|name&list=search&generator=search&inprop=url&srlimit=10&sroffset=1&srprop=snippet&gsrlimit=10&gsroffset=1"
 
   newAJAX.open('GET', url+"&srsearch="+search+"&gsrsearch="+search);
   newAJAX.send();
@@ -49,26 +52,19 @@ function wikiSearch(search){
 function displayResults(results){
   let snippets = results.query.search;
   let urls = results.query.pages;
-  let urlArr = [];
+  let imgArr = [];
 
   let ul = document.createElement('ul');
 
   console.log(snippets);
   console.log(urls);
 
-  for (let key in urls){
-    urlArr.push(urls[key].fullurl);
-  }
-
-  console.log(urlArr);
-  console.log(snippets[0].title);
-
-  for(let i=0; i<(urlArr.length>10 ? 10 : urlArr.length); i++){
+  for(let i=0; i<(snippets.length>10 ? 10 : snippets.length); i++){
     let a = document.createElement('a');
     let li = document.createElement('li');
     let p = document.createElement('p');
 
-    a.href = urlArr[i];
+    a.href = wikiLink+snippets[i].pageid;
     a.text = snippets[i].title + ": ";
     a.setAttribute("target", "_blank");
 
@@ -83,7 +79,24 @@ function displayResults(results){
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TODO[x]: Add a "random article" functionality
+// TODO: Get list of wikipedia API endpoints
 // TODO: Find a way to get user language, and change API endpoint to that language
+// TODO: Remove all "console-log"s and "alert"s before final push
 // FUTURE: Change to jQuery
 
 
