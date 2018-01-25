@@ -6,13 +6,15 @@ let searchBtn = document.getElementById("sbtn");
 let randomBtn = document.getElementById("rbtn");
 
 // Pressing "ENTER" or clicking button - initiates API call
-searchBtn.onclick = sbox;
-searchBox.addEventListener("keyup", function(event){
-    event.preventDefault();
-    if (event.keyCode === 13){
-      searchBtn.click();
-    }
-  })
+$(document).ready(function(){
+  searchBtn.onclick = sbox;
+  searchBox.addEventListener("keyup", function(event){
+      event.preventDefault ? event.preventDefault() : (event.returnValue = false);
+      if (event.keyCode === 13){
+        searchBtn.click();
+      }
+    })
+})
 
 // Stores user search text, removes previous search items, if any.
 function sbox(){
@@ -26,7 +28,6 @@ function sbox(){
       let ul = document.querySelector("#container ul");
       ul.parentNode.removeChild(ul);
     }
-
     wikiSearch(searchText);
   }
 }
@@ -39,11 +40,11 @@ function wikiSearch(search){
 
   newAJAX.open('GET', url+"&srsearch="+search+"&gsrsearch="+search);
   newAJAX.send();
-  newAJAX.responseType = 'json';
+//  newAJAX.responseType = 'json';
 
   newAJAX.onload = function(){
-    results = newAJAX.response;
-//    console.log(results);
+    results = JSON.parse(newAJAX.responseText);
+    console.log(results);
     displayResults(results);
   }
 }
