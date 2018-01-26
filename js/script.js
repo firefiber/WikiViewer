@@ -36,7 +36,7 @@ function sbox(){
 function wikiSearch(search){
   let newAJAX = new XMLHttpRequest();
   let page = 0;
-  let url = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=info|pageimages&piprop=thumbnail|name&list=search&generator=search&inprop=url&srlimit=10&sroffset=1&srprop=snippet&gsrlimit=10&gsroffset=1"
+  let url = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=info|pageimages&piprop=thumbnail|name&list=search&generator=search&inprop=url&srlimit=10&sroffset=0&srprop=snippet&gsrlimit=10&gsroffset=0"
 
   newAJAX.open('GET', url+"&srsearch="+search+"&gsrsearch="+search);
   newAJAX.send();
@@ -44,7 +44,7 @@ function wikiSearch(search){
 
   newAJAX.onload = function(){
     results = JSON.parse(newAJAX.responseText);
-    console.log(results);
+//    console.log(results);
     displayResults(results);
   }
 }
@@ -57,8 +57,19 @@ function displayResults(results){
 
   let ul = document.createElement('ul');
 
-  console.log(snippets);
+//  console.log(snippets);
   console.log(urls);
+
+  const arr = [];
+  for(let key in urls){
+    arr.push(urls[key]);
+  }
+
+  arr.sort(function(i,j){
+    return i.index - j.index;
+  });
+
+  console.log(arr);
 
   for(let i=0; i<(snippets.length>10 ? 10 : snippets.length); i++){
     let a = document.createElement('a');
