@@ -1,4 +1,3 @@
-let wikiLink = "http://en.wikipedia.org/?curid="; //Used to put in the page ID for full URL
 let resDisp = document.getElementById("container"); //Div where results are displayed
 
 let searchBox = document.getElementById("searchBox");
@@ -65,10 +64,12 @@ function wikiSearch(search){
 
 // Displays the results, title and snippet, along with URL to page
 function displayResults(results){
+  let imgLoc = "https://commons.wikimedia.org/wiki/Special:FilePath/";
   let ul = document.createElement('ul');
 
   for(let i=0; i<(results.length>10 ? 10 : results.length); i++){
     let a = document.createElement('a');
+    let img = document.createElement('img');
     let li = document.createElement('li');
     let p = document.createElement('p');
 
@@ -102,6 +103,7 @@ function displayResults(results){
 
 
 // TODO[x]: Add a "random article" functionality
+// TODO: Display images next to search results
 // TODO: Get list of wikipedia API endpoints
 // TODO: Find a way to get user language, and change API endpoint to that language
 // TODO: Remove all "console-log"s and "alert"s before final push
