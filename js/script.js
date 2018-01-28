@@ -32,62 +32,58 @@ function sbox(){
   }
 }
 
-// Initiates API call with search text
+// Initiates API call with search text, segregates recieved data before displaying it.
 function wikiSearch(search){
   let newAJAX = new XMLHttpRequest();
   let page = 0;
-  let url = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=info|pageimages&piprop=thumbnail|name&list=search&generator=search&inprop=url&srlimit=10&sroffset=0&srprop=snippet&gsrlimit=10&gsroffset=0"
+  let url = "https://en.wikipedia.org/w/api.php?&origin=*&action=query&format=json&prop=extracts|info|images&generator=search&exsentences=2&exintro=1&inprop=url&imlimit=2&gsrlimit=10&gsroffset=0&gsrsearch=Mozart"
 
-  newAJAX.open('GET', url+"&srsearch="+search+"&gsrsearch="+search);
+  newAJAX.open('GET', url+"&gsrsearch="+search);
   newAJAX.send();
-//  newAJAX.responseType = 'json';
 
   newAJAX.onload = function(){
-    results = JSON.parse(newAJAX.responseText);
-//    console.log(results);
-    displayResults(results);
+    rawData = JSON.parse(newAJAX.responseText);
+    dataSort(rawData);
+  }
+
+  //Takes the 'query' bit of the response obj, converts it to an array,
+  //sorts array by the 'index' of each item, low to high
+  function dataSort(rawData){
+    let rObj = rawData.query.pages;
+    let rArr = [];
+
+    for(let key in rObj){
+      rArr.push(rObj[key]);
+    }
+    rArr.sort(function(i,j){
+      return i.index - j.index;
+    })
+
+    displayResults(rArr);
   }
 }
 
 // Displays the results, title and snippet, along with URL to page
 function displayResults(results){
-  let snippets = results.query.search;
-  let urls = results.query.pages;
-  let imgArr = [];
-
   let ul = document.createElement('ul');
 
-//  console.log(snippets);
-  console.log(urls);
-
-  const arr = [];
-  for(let key in urls){
-    arr.push(urls[key]);
-  }
-
-  arr.sort(function(i,j){
-    return i.index - j.index;
-  });
-
-  console.log(arr);
-
-  for(let i=0; i<(snippets.length>10 ? 10 : snippets.length); i++){
+  for(let i=0; i<(results.length>10 ? 10 : results.length); i++){
     let a = document.createElement('a');
     let li = document.createElement('li');
     let p = document.createElement('p');
 
-    a.href = wikiLink+snippets[i].pageid;
-    a.text = snippets[i].title + ": ";
+    a.href = results[i].fullurl;
+    a.text = results[i].title + ": ";
     a.setAttribute("target", "_blank");
 
-    p.innerHTML = snippets[i].snippet;
+    p.innerHTML = results[i].extract;
 
     li.appendChild(a);
     li.appendChild(p);
     ul.appendChild(li);
     resDisp.appendChild(ul);
   }
-//  alert(resArr[1]);
+
 }
 
 
