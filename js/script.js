@@ -35,7 +35,9 @@ function sbox(){
 function wikiSearch(search){
   let newAJAX = new XMLHttpRequest();
   let page = 0;
-  let url = "https://en.wikipedia.org/w/api.php?&origin=*&action=query&format=json&prop=extracts|info|images&generator=search&exsentences=2&exintro=1&inprop=url&imlimit=2&gsrlimit=10&gsroffset=0&gsrsearch=Mozart"
+  let urlOld = "https://en.wikipedia.org/w/api.php?&origin=*&action=query&format=json&prop=extracts|info|images&generator=search&exsentences=2&exintro=1&inprop=url&imlimit=2&gsrlimit=10&gsroffset=0&gsrsearch=Mozart"
+
+  let url = "https://en.wikipedia.org/w/api.php?&origin=*&action=query&format=json&prop=extracts|info|images|pageimages&generator=search&exchars=120&exintro=1&inprop=url&imlimit=2&piprop=original|name&gsrlimit=10&gsroffset=0"
 
   newAJAX.open('GET', url+"&gsrsearch="+search);
   newAJAX.send();
@@ -57,7 +59,7 @@ function wikiSearch(search){
     rArr.sort(function(i,j){
       return i.index - j.index;
     })
-
+    console.log(rArr);
     displayResults(rArr);
   }
 }
@@ -72,6 +74,19 @@ function displayResults(results){
     let img = document.createElement('img');
     let li = document.createElement('li');
     let p = document.createElement('p');
+
+//    if(results[i].pageimage || results[i].original || results[i].images){
+//      if(results[i].pageimage){
+//        img.src=imgLoc+results[i].pageimage;
+//        li.appendChild(img);
+//      }
+//
+//      else if(results[i].original){
+//        console.log("Has original image");
+//      }
+//
+//      else console.log("Has images array");
+//    }
 
     a.href = results[i].fullurl;
     a.text = results[i].title + ": ";
