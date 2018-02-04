@@ -21,11 +21,13 @@ function sbox(){
   let errorMsg = document.getElementById("error");
 
   if (searchText !== ""){
-    let hasChild = resDisp.querySelector("#container ul") != null;
+    let hasChild = resDisp.querySelector("#container div.resultCard") != null;
 
     if(hasChild){
-      let ul = document.querySelector("#container ul");
-      ul.parentNode.removeChild(ul);
+      let div = document.getElementsByClassName("resultCard");
+      while(div[0]){
+        div[0].parentNode.removeChild(div[0]);
+      }
     }
     wikiSearch(searchText);
   }
@@ -37,7 +39,7 @@ function wikiSearch(search){
   let page = 0;
   let urlOld = "https://en.wikipedia.org/w/api.php?&origin=*&action=query&format=json&prop=extracts|info|images&generator=search&exsentences=2&exintro=1&inprop=url&imlimit=2&gsrlimit=10&gsroffset=0&gsrsearch=Mozart"
 
-  let url = "https://en.wikipedia.org/w/api.php?&origin=*&action=query&format=json&prop=extracts|info|images|pageimages&generator=search&exchars=120&exintro=1&inprop=url&imlimit=2&piprop=original|name&gsrlimit=10&gsroffset=0"
+  let url = "https://en.wikipedia.org/w/api.php?&origin=*&action=query&format=json&prop=extracts|info|images|pageimages&generator=search&exchars=100&exintro=1&inprop=url&imlimit=2&piprop=original|name&gsrlimit=10&gsroffset=0"
 
   newAJAX.open('GET', url+"&gsrsearch="+search);
   newAJAX.send();
@@ -67,9 +69,9 @@ function wikiSearch(search){
 // Displays the results, title and snippet, along with URL to page
 function displayResults(results){
   let imgLoc = "https://commons.wikimedia.org/wiki/Special:FilePath/";
-  let ul = document.createElement('ul');
 
   for(let i=0; i<(results.length>10 ? 10 : results.length); i++){
+    let div = document.createElement('div');
     let a = document.createElement('a');
     let img = document.createElement('img');
     let li = document.createElement('li');
@@ -94,10 +96,11 @@ function displayResults(results){
 
     p.innerHTML = results[i].extract;
 
-    li.appendChild(a);
-    li.appendChild(p);
-    ul.appendChild(li);
-    resDisp.appendChild(ul);
+    div.className = "resultCard";
+
+    div.appendChild(a);
+    div.appendChild(p);
+    resDisp.appendChild(div);
   }
 
 }
