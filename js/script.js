@@ -18,17 +18,23 @@ $(document).ready(function(){
 // Stores user search text, removes previous search items, if any.
 function sbox(){
   let searchText = document.getElementById("searchBox").value;
-  let errorMsg = document.getElementById("error");
+  let errorMsg = document.querySelector(".error");
 
   if (searchText !== ""){
     let hasChild = resDisp.querySelector("#container div.resultCard") != null;
+    let hasError = document.querySelector(".error") != null;
 
+    if(hasError){
+      let error = document.querySelector(".error");
+      error.parentNode.removeChild(error);
+    }
     if(hasChild){
       let div = document.getElementsByClassName("resultCard");
       while(div[0]){
         div[0].parentNode.removeChild(div[0]);
       }
     }
+
     wikiSearch(searchText);
   }
 }
@@ -55,7 +61,6 @@ function wikiSearch(search){
       p.textContent = "No results.";
       resDisp.appendChild(p);
     }
-    dataSort(rawData);
   }
 
   //Takes the 'query' bit of the response obj, converts it to an array,
@@ -70,7 +75,6 @@ function wikiSearch(search){
     rArr.sort(function(i,j){
       return i.index - j.index;
     })
-    console.log(rArr);
     displayResults(rArr);
   }
 }
