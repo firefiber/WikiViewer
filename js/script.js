@@ -46,6 +46,15 @@ function wikiSearch(search){
 
   newAJAX.onload = function(){
     rawData = JSON.parse(newAJAX.responseText);
+    if(rawData.query){
+      dataSort(rawData);
+    }
+    else{
+      let p = document.createElement('p');
+      p.className = "error";
+      p.textContent = "No results.";
+      resDisp.appendChild(p);
+    }
     dataSort(rawData);
   }
 
